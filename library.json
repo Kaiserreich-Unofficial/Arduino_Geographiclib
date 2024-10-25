@@ -1,0 +1,23 @@
+{
+    "name": "Arduino_Geographiclib",
+    "keywords": "Geographic, UTM, Coordinate Converter, Navigation, GPS",
+    "description": "This is a port version of Geographiclib for ArduinoIDE. Theoretically supports all development boards with full standard libraries.",
+    "repository":
+    {
+        "type": "git",
+        "url": "https://github.com/Kaiserreich-Unofficial/Arduino_Geographiclib.git"
+    },
+    "authors":
+    {
+        "name": "Kaiserreich-Unofficial",
+        "url": "https://github.com/Kaiserreich-Unofficial/Arduino_Geographiclib",
+        "maintainer": true
+    },
+    "version": "2.4.0",
+    "license": "MIT",
+    "frameworks": "arduino",
+    "platforms": "*",
+    "dependencies":
+    {
+    }
+  }
