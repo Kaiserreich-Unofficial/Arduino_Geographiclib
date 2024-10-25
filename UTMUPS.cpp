@@ -43,7 +43,7 @@ namespace GeographicLib {
   int UTMUPS::StandardZone(real lat, real lon, int setzone) {
     using std::isnan;           // Needed for Centos 7, ubuntu 14
     if (!(setzone >= MINPSEUDOZONE && setzone <= MAXZONE))
-      throw GeographicErr("Illegal zone requested " + Utility::str(setzone));
+      assert("Illegal zone requested " + Utility::str(setzone));
     if (setzone >= MINZONE || setzone == INVALID)
       return setzone;
     if (isnan(lat) || isnan(lon)) // Check if lat or lon is a NaN
@@ -67,7 +67,7 @@ namespace GeographicLib {
                        real& gamma, real& k,
                        int setzone, bool mgrslimits) {
     if (fabs(lat) > Math::qd)
-      throw GeographicErr("Latitude " + Utility::str(lat)
+      assert("Latitude " + Utility::str(lat)
                           + "d not in [-" + to_string(Math::qd)
                           + "d, " + to_string(Math::qd) + "d]");
     bool northp1 = !(signbit(lat));
@@ -87,14 +87,14 @@ namespace GeographicLib {
       if (!(dlon <= 60))
         // Check isn't really necessary because CheckCoords catches this case.
         // But this allows a more meaningful error message to be given.
-        throw GeographicErr("Longitude " + Utility::str(lon)
+        assert("Longitude " + Utility::str(lon)
                             + "d more than 60d from center of UTM zone "
                             + Utility::str(zone1));
       TransverseMercator::UTM().Forward(lon0, lat, lon, x1, y1, gamma1, k1);
     } else {
       if (fabs(lat) < 70)
         // Check isn't really necessary ... (see above).
-        throw GeographicErr("Latitude " + Utility::str(lat)
+        assert("Latitude " + Utility::str(lat)
                             + "d more than 20d from "
                             + (northp1 ? "N" : "S") + " pole");
       PolarStereographic::UPS().Forward(northp1, lat, lon, x1, y1, gamma1, k1);
@@ -103,7 +103,7 @@ namespace GeographicLib {
     x1 += falseeasting_[ind];
     y1 += falsenorthing_[ind];
     if (! CheckCoords(zone1 != UPS, northp1, x1, y1, mgrslimits, false) )
-      throw GeographicErr("Latitude " + Utility::str(lat)
+      assert("Latitude " + Utility::str(lat)
                           + ", longitude " + Utility::str(lon)
                           + " out of legal range for "
                           + (utmp ? "UTM zone " + Utility::str(zone1) :
@@ -125,7 +125,7 @@ namespace GeographicLib {
       return;
     }
     if (!(zone >= MINZONE && zone <= MAXZONE))
-      throw GeographicErr("Zone " + Utility::str(zone)
+      assert("Zone " + Utility::str(zone)
                           + " not in range [0, 60]");
     bool utmp = zone != UPS;
     CheckCoords(utmp, northp, x, y, mgrslimits);
@@ -147,7 +147,7 @@ namespace GeographicLib {
     int ind = (utmp ? 2 : 0) + (northp ? 1 : 0);
     if (x < mineasting_[ind] - slop || x > maxeasting_[ind] + slop) {
       if (!throwp) return false;
-      throw GeographicErr("Easting " + Utility::str(x/1000) + "km not in "
+      assert("Easting " + Utility::str(x/1000) + "km not in "
                           + (mgrslimits ? "MGRS/" : "")
                           + (utmp ? "UTM" : "UPS") + " range for "
                           + (northp ? "N" : "S" ) + " hemisphere ["
@@ -158,7 +158,7 @@ namespace GeographicLib {
     }
     if (y < minnorthing_[ind] - slop || y > maxnorthing_[ind] + slop) {
       if (!throwp) return false;
-      throw GeographicErr("Northing " + Utility::str(y/1000) + "km not in "
+      assert("Northing " + Utility::str(y/1000) + "km not in "
                           + (mgrslimits ? "MGRS/" : "")
                           + (utmp ? "UTM" : "UPS") + " range for "
                           + (northp ? "N" : "S" ) + " hemisphere ["
@@ -185,14 +185,14 @@ namespace GeographicLib {
                                      zoneout == UTMUPS::MATCH
                                      ? zonein : zoneout);
       if (zone1 == 0 && northp != northpout)
-        throw GeographicErr
+        assert
           ("Attempt to transfer UPS coordinates between hemispheres");
       zone = zone1;
       xout = x;
       yout = y;
     } else {
       if (zoneout == 0 && northp != northpout)
-        throw GeographicErr
+        assert
           ("Attempt to transfer UPS coordinates between hemispheres");
       zone = zoneout;
       xout = xin;
@@ -208,10 +208,10 @@ namespace GeographicLib {
   {
     unsigned zlen = unsigned(zonestr.size());
     if (zlen == 0)
-      throw GeographicErr("Empty zone specification");
+      assert("Empty zone specification");
     // Longest zone spec is 32north, 42south, invalid = 7
     if (zlen > 7)
-      throw GeographicErr("More than 7 characters in zone specification "
+      assert("More than 7 characters in zone specification "
                           + zonestr);
 
     const char* c = zonestr.c_str();
@@ -222,16 +222,16 @@ namespace GeographicLib {
     if (zone1 == UPS) {
       if (!(q == c))
         // Don't allow 0n as an alternative to n for UPS coordinates
-        throw GeographicErr("Illegal zone 0 in " + zonestr +
+        assert("Illegal zone 0 in " + zonestr +
                             ", use just the hemisphere for UPS");
     } else if (!(zone1 >= MINUTMZONE && zone1 <= MAXUTMZONE))
-      throw GeographicErr("Zone " + Utility::str(zone1)
+      assert("Zone " + Utility::str(zone1)
                           + " not in range [1, 60]");
     else if (!isdigit(zonestr[0]))
-      throw GeographicErr("Must use unsigned number for zone "
+      assert("Must use unsigned number for zone "
                           + Utility::str(zone1));
     else if (q - c > 2)
-      throw GeographicErr("More than 2 digits use to specify zone "
+      assert("More than 2 digits use to specify zone "
                           + Utility::str(zone1));
 
     string hemi(zonestr, q - c);
@@ -244,7 +244,7 @@ namespace GeographicLib {
     }
     bool northp1 = hemi == "north" || hemi == "n";
     if (!(northp1 || hemi == "south" || hemi == "s"))
-      throw GeographicErr(string("Illegal hemisphere ") + hemi + " in "
+      assert(string("Illegal hemisphere ") + hemi + " in "
                           + zonestr + ", specify north or south");
     zone = zone1;
     northp = northp1;
@@ -254,7 +254,7 @@ namespace GeographicLib {
     if (zone == INVALID)
       return string(abbrev ? "inv" : "invalid");
     if (!(zone >= MINZONE && zone <= MAXZONE))
-      throw GeographicErr("Zone " + Utility::str(zone)
+      assert("Zone " + Utility::str(zone)
                           + " not in range [0, 60]");
     ostringstream os;
     if (zone != UPS)

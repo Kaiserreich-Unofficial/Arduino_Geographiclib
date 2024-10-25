@@ -69,21 +69,21 @@ namespace GeographicLib {
       string coeff = _filename + ".cof";
       ifstream coeffstr(coeff.c_str(), ios::binary);
       if (!coeffstr.good())
-        throw GeographicErr("Error opening " + coeff);
+        assert("Error opening " + coeff);
       char id[idlength_ + 1];
       coeffstr.read(id, idlength_);
       if (!coeffstr.good())
-        throw GeographicErr("No header in " + coeff);
+        assert("No header in " + coeff);
       id[idlength_] = '\0';
       if (_id != string(id))
-        throw GeographicErr("ID mismatch: " + _id + " vs " + id);
+        assert("ID mismatch: " + _id + " vs " + id);
       for (int i = 0; i < _nNmodels + 1 + _nNconstants; ++i) {
         int N, M;
         if (truncate) { N = Nmax; M = Mmax; }
         SphericalEngine::coeff::readcoeffs(coeffstr, N, M, _gG[i], _hH[i],
                                            truncate);
         if (!(M < 0 || _gG[i][0] == 0))
-          throw GeographicErr("A degree 0 term is not permitted");
+          assert("A degree 0 term is not permitted");
         _harm.push_back(SphericalHarmonic(_gG[i], _hH[i], N, N, M, _a, _norm));
         _nmx = max(_nmx, _harm.back().Coefficients().nmx());
         _mmx = max(_mmx, _harm.back().Coefficients().mmx());
@@ -91,7 +91,7 @@ namespace GeographicLib {
       int pos = int(coeffstr.tellg());
       coeffstr.seekg(0, ios::end);
       if (pos != coeffstr.tellg())
-        throw GeographicErr("Extra data in " + coeff);
+        assert("Extra data in " + coeff);
     }
   }
 
@@ -100,17 +100,17 @@ namespace GeographicLib {
     _filename = _dir + "/" + name + ".wmm";
     ifstream metastr(_filename.c_str());
     if (!metastr.good())
-      throw GeographicErr("Cannot open " + _filename);
+      assert("Cannot open " + _filename);
     string line;
     getline(metastr, line);
     if (!(line.size() >= 6 && line.substr(0,5) == "WMMF-"))
-      throw GeographicErr(_filename + " does not contain WMMF-n signature");
+      assert(_filename + " does not contain WMMF-n signature");
     string::size_type n = line.find_first_of(spaces, 5);
     if (n != string::npos)
       n -= 5;
     string version(line, 5, n);
     if (!(version == "1" || version == "2"))
-      throw GeographicErr("Unknown version in " + _filename + ": " + version);
+      assert("Unknown version in " + _filename + ": " + version);
     string key, val;
     while (getline(metastr, line)) {
       if (!Utility::ParseLine(line, key, val))
@@ -126,7 +126,7 @@ namespace GeographicLib {
         _a = Utility::val<real>(val);
       else if (key == "Type") {
         if (!(val == "Linear" || val == "linear"))
-          throw GeographicErr("Only linear models are supported");
+          assert("Only linear models are supported");
       } else if (key == "Epoch")
         _t0 = Utility::val<real>(val);
       else if (key == "DeltaEpoch")
@@ -149,34 +149,34 @@ namespace GeographicLib {
         else if (val == "SCHMIDT" || val == "Schmidt" || val == "schmidt")
           _norm = SphericalHarmonic::SCHMIDT;
         else
-          throw GeographicErr("Unknown normalization " + val);
+          assert("Unknown normalization " + val);
       } else if (key == "ByteOrder") {
         if (val == "Big" || val == "big")
-          throw GeographicErr("Only little-endian ordering is supported");
+          assert("Only little-endian ordering is supported");
         else if (!(val == "Little" || val == "little"))
-          throw GeographicErr("Unknown byte ordering " + val);
+          assert("Unknown byte ordering " + val);
       } else if (key == "ID")
         _id = val;
       // else unrecognized keywords are skipped
     }
     // Check values
     if (!(isfinite(_a) && _a > 0))
-      throw GeographicErr("Reference radius must be positive");
+      assert("Reference radius must be positive");
     if (!(_t0 > 0))
-      throw GeographicErr("Epoch time not defined");
+      assert("Epoch time not defined");
     if (_tmin >= _tmax)
-      throw GeographicErr("Min time exceeds max time");
+      assert("Min time exceeds max time");
     if (_hmin >= _hmax)
-      throw GeographicErr("Min height exceeds max height");
+      assert("Min height exceeds max height");
     if (int(_id.size()) != idlength_)
-      throw GeographicErr("Invalid ID");
+      assert("Invalid ID");
     if (_nNmodels < 1)
-      throw GeographicErr("NumModels must be positive");
+      assert("NumModels must be positive");
     if (!(_nNconstants == 0 || _nNconstants == 1))
-      throw GeographicErr("NumConstants must be 0 or 1");
+      assert("NumConstants must be 0 or 1");
     if (!(_dt0 > 0)) {
       if (_nNmodels > 1)
-        throw GeographicErr("DeltaEpoch must be positive");
+        assert("DeltaEpoch must be positive");
       else
         _dt0 = 1;
     }

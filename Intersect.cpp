@@ -48,7 +48,7 @@ namespace GeographicLib {
     _d2 = 2 * _t3 / 3;
     _d3 = _t4 - _delta;
     if (! (_d1 < _d3 && _d2 < _d3 && _d2 < 2 * _t1) )
-      throw GeographicErr("Ellipsoid too eccentric for Closest");
+      assert("Ellipsoid too eccentric for Closest");
   }
 
   Intersect::Point

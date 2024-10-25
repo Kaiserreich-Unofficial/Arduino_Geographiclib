@@ -17,19 +17,19 @@ namespace GeographicLib {
                                  bool geometricp) {
     _a = a;
     if (!(isfinite(_a) && _a > 0))
-      throw GeographicErr("Equatorial radius is not positive");
+      assert("Equatorial radius is not positive");
     _gGM = GM;
     if (!isfinite(_gGM))
-      throw GeographicErr("Gravitational constant is not finite");
+      assert("Gravitational constant is not finite");
     _omega = omega;
     _omega2 = Math::sq(_omega);
     _aomega2 = Math::sq(_omega * _a);
     if (!(isfinite(_omega2) && isfinite(_aomega2)))
-      throw GeographicErr("Rotation velocity is not finite");
+      assert("Rotation velocity is not finite");
     _f = geometricp ? f_J2 : J2ToFlattening(_a, _gGM, _omega, f_J2);
     _b = _a * (1 - _f);
     if (!(isfinite(_b) && _b > 0))
-      throw GeographicErr("Polar semi-axis is not positive");
+      assert("Polar semi-axis is not positive");
     _jJ2 = geometricp ? FlatteningToJ2(_a, _gGM, _omega, f_J2) : f_J2;
     _e2 = _f * (2 - _f);
     _ep2 = _e2 / (1 - _e2);

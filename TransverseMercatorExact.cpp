@@ -63,13 +63,13 @@ namespace GeographicLib {
     , _eEv(_mv)
   {
     if (!(isfinite(_a) && _a > 0))
-      throw GeographicErr("Equatorial radius is not positive");
+      assert("Equatorial radius is not positive");
     if (!(_f > 0))
-      throw GeographicErr("Flattening is not positive");
+      assert("Flattening is not positive");
     if (!(_f < 1))
-      throw GeographicErr("Polar semi-axis is not positive");
+      assert("Polar semi-axis is not positive");
     if (!(isfinite(_k0) && _k0 > 0))
-      throw GeographicErr("Scale is not positive");
+      assert("Scale is not positive");
   }
 
   const TransverseMercatorExact& TransverseMercatorExact::UTM() {

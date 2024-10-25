@@ -20,11 +20,12 @@
 
 #if defined(_MSC_VER)
 // Squelch warnings about constant conditional expressions
-#  pragma warning (push)
-#  pragma warning (disable: 4127)
+#pragma warning(push)
+#pragma warning(disable : 4127)
 #endif
 
-namespace GeographicLib {
+namespace GeographicLib
+{
 
   /**
    * \brief Some utility routines for %GeographicLib
@@ -32,9 +33,11 @@ namespace GeographicLib {
    * Example of use:
    * \include example-Utility.cpp
    **********************************************************************/
-  class GEOGRAPHICLIB_EXPORT Utility {
+  class GEOGRAPHICLIB_EXPORT Utility
+  {
   private:
-    static bool gregorian(int y, int m, int d) {
+    static bool gregorian(int y, int m, int d)
+    {
       // The original cut over to the Gregorian calendar in Pope Gregory XIII's
       // time had 1582-10-04 followed by 1582-10-15. Here we implement the
       // switch over used by the English-speaking world where 1752-09-02 was
@@ -43,11 +46,12 @@ namespace GeographicLib {
       // March.
       return 100 * (100 * y + m) + d >= 17520914; // or 15821015
     }
-    static bool gregorian(int s) {
-      return s >= 639799;       // 1752-09-14
+    static bool gregorian(int s)
+    {
+      return s >= 639799; // 1752-09-14
     }
-  public:
 
+  public:
     /**
      * Convert a date to the day numbering sequentially starting with
      * 0001-01-01 as day 1.
@@ -80,7 +84,7 @@ namespace GeographicLib {
      * @param[out] m the month, Jan = 1, etc.
      * @param[out] d the day of the month.
      **********************************************************************/
-    static void date(int s, int& y, int& m, int& d);
+    static void date(int s, int &y, int &m, int &d);
 
     /**
      * Given a date as a string in the format yyyy, yyyy-mm, or yyyy-mm-dd,
@@ -94,7 +98,7 @@ namespace GeographicLib {
      * @param[out] d the day of the month.
      * @exception GeographicErr is \e s is malformed.
      **********************************************************************/
-    static void date(const std::string& s, int& y, int& m, int& d);
+    static void date(const std::string &s, int &y, int &m, int &d);
 
     /**
      * Given the date, return the day of the week.
@@ -114,8 +118,9 @@ namespace GeographicLib {
      * @return the day of the week with Sunday, Monday--Saturday = 0,
      *   1--6.
      **********************************************************************/
-    static int dow(int s) {
-      return (s + 5) % 7;  // The 5 offset makes day 1 (0001-01-01) a Saturday.
+    static int dow(int s)
+    {
+      return (s + 5) % 7; // The 5 offset makes day 1 (0001-01-01) a Saturday.
     }
 
     /**
@@ -132,15 +137,10 @@ namespace GeographicLib {
      * number with 2010-01-01 giving 2010.0 and 2012-07-03 giving 2012.5.  The
      * string "now" is interpreted as the present date.
      **********************************************************************/
-    template<typename T> static T fractionalyear(const std::string& s) {
-      try {
-        return val<T>(s);
-      }
-      catch (const std::exception&) {}
-      int y, m, d;
-      date(s, y, m, d);
-      int t = day(y, m, d, true);
-      return T(y) + T(t - day(y)) / T(day(y + 1) - day(y));
+    template <typename T>
+    static T fractionalyear(const std::string &s)
+    {
+      return val<T>(s);
     }
 
     /**
@@ -158,10 +158,14 @@ namespace GeographicLib {
      * and "false".  There is an overload of this function if T is Math::real;
      * this deals with inf and nan.
      **********************************************************************/
-    template<typename T> static std::string str(T x, int p = -1) {
+    template <typename T>
+    static std::string str(T x, int p = -1)
+    {
       std::ostringstream s;
-      if (p >= 0) s << std::fixed << std::setprecision(p);
-      s << std::boolalpha << x; return s.str();
+      if (p >= 0)
+        s << std::fixed << std::setprecision(p);
+      s << std::boolalpha << x;
+      return s.str();
     }
 
     /**
@@ -170,7 +174,7 @@ namespace GeographicLib {
      * @param[in] s the string to be trimmed
      * @return the trimmed string
      **********************************************************************/
-    static std::string trim(const std::string& s);
+    static std::string trim(const std::string &s);
 
     /**
      * Lookup up a character in a string.
@@ -183,7 +187,7 @@ namespace GeographicLib {
      * \e c is converted to upper case before search \e s.  Therefore, it is
      * intended that \e s should not contain any lower case letters.
      **********************************************************************/
-    static int lookup(const std::string& s, char c);
+    static int lookup(const std::string &s, char c);
 
     /**
      * Lookup up a character in a char*.
@@ -196,7 +200,7 @@ namespace GeographicLib {
      * \e c is converted to upper case before search \e s.  Therefore, it is
      * intended that \e s should not contain any lower case letters.
      **********************************************************************/
-    static int lookup(const char* s, char c);
+    static int lookup(const char *s, char c);
 
     /**
      * Convert a string to type T.
@@ -222,19 +226,24 @@ namespace GeographicLib {
      * If T is std::string, then \e s is returned (with the white space at the
      * beginning and end removed).
      **********************************************************************/
-    template<typename T> static T val(const std::string& s) {
+    template <typename T>
+    static T val(const std::string &s)
+    {
       // If T is bool, then the specialization val<bool>() defined below is
       // used.
       T x;
       std::string errmsg, t(trim(s));
-      do {                     // Executed once (provides the ability to break)
+      do
+      { // Executed once (provides the ability to break)
         std::istringstream is(t);
-        if (!(is >> x)) {
+        if (!(is >> x))
+        {
           errmsg = "Cannot decode " + t;
           break;
         }
         int pos = int(is.tellg()); // Returns -1 at end of string?
-        if (!(pos < 0 || pos == int(t.size()))) {
+        if (!(pos < 0 || pos == int(t.size())))
+        {
           errmsg = "Extra text " + t.substr(pos) + " at end of " + t;
           break;
         }
@@ -242,7 +251,7 @@ namespace GeographicLib {
       } while (false);
       x = std::numeric_limits<T>::is_integer ? 0 : nummatch<T>(t);
       if (x == 0)
-        throw GeographicErr(errmsg);
+        assert(errmsg);
       return x;
     }
 
@@ -257,7 +266,9 @@ namespace GeographicLib {
      *
      * White space is not allowed at the beginning or end of \e s.
      **********************************************************************/
-    template<typename T> static T nummatch(const std::string& s) {
+    template <typename T>
+    static T nummatch(const std::string &s)
+    {
       if (s.length() < 3)
         return 0;
       std::string t(s);
@@ -271,7 +282,7 @@ namespace GeographicLib {
       if (p1 == std::string::npos || p1 + 1 < p0 + 3)
         return 0;
       // Strip off sign and trailing 0s
-      t = t.substr(p0, p1 + 1 - p0);  // Length at least 3
+      t = t.substr(p0, p1 + 1 - p0); // Length at least 3
       if (t == "NAN" || t == "1.#QNAN" || t == "1.#SNAN" || t == "1.#IND" ||
           t == "1.#R")
         return Math::NaN<T>();
@@ -295,13 +306,13 @@ namespace GeographicLib {
      * use a floating point number in the numerator, i.e., "-1.0/300".  (Recent
      * versions of the msys shell appear \e not to have this problem.)
      **********************************************************************/
-    template<typename T> static T fract(const std::string& s) {
+    template <typename T>
+    static T fract(const std::string &s)
+    {
       std::string::size_type delim = s.find('/');
-      return
-        !(delim != std::string::npos && delim >= 1 && delim + 2 <= s.size()) ?
-        val<T>(s) :
-        // delim in [1, size() - 2]
-        val<T>(s.substr(0, delim)) / val<T>(s.substr(delim + 1));
+      return !(delim != std::string::npos && delim >= 1 && delim + 2 <= s.size()) ? val<T>(s) :
+                                                                                  // delim in [1, size() - 2]
+                 val<T>(s.substr(0, delim)) / val<T>(s.substr(delim + 1));
     }
 
     /**
@@ -317,41 +328,43 @@ namespace GeographicLib {
      * @param[in] num the size of the array.
      * @exception GeographicErr if the data cannot be read.
      **********************************************************************/
-    template<typename ExtT, typename IntT, bool bigendp>
-      static void readarray(std::istream& str, IntT array[], size_t num) {
+    template <typename ExtT, typename IntT, bool bigendp>
+    static void readarray(std::istream &str, IntT array[], size_t num)
+    {
       // for C++17 use if constexpr
       if (sizeof(IntT) == sizeof(ExtT) &&
           std::numeric_limits<IntT>::is_integer ==
-          std::numeric_limits<ExtT>::is_integer)
-        {
-          // Data is compatible (aside from the issue of endian-ness).
-          str.read(reinterpret_cast<char*>(array), num * sizeof(ExtT));
-          if (!str.good())
-            throw GeographicErr("Failure reading data");
-          // for C++17 use if constexpr
-          if (bigendp != Math::bigendian) { // endian mismatch -> swap bytes
-            for (size_t i = num; i--;)
-              array[i] = Math::swab<IntT>(array[i]);
-          }
+              std::numeric_limits<ExtT>::is_integer)
+      {
+        // Data is compatible (aside from the issue of endian-ness).
+        str.read(reinterpret_cast<char *>(array), num * sizeof(ExtT));
+        if (!str.good())
+          assert("Failure reading data");
+        // for C++17 use if constexpr
+        if (bigendp != Math::bigendian)
+        { // endian mismatch -> swap bytes
+          for (size_t i = num; i--;)
+            array[i] = Math::swab<IntT>(array[i]);
         }
+      }
       else
+      {
+        const int bufsize = 1024; // read this many values at a time
+        ExtT buffer[bufsize];     // temporary buffer
+        int k = int(num);         // data values left to read
+        int i = 0;                // index into output array
+        while (k)
         {
-          const int bufsize = 1024; // read this many values at a time
-          ExtT buffer[bufsize];     // temporary buffer
-          int k = int(num);         // data values left to read
-          int i = 0;                // index into output array
-          while (k) {
-            int n = (std::min)(k, bufsize);
-            str.read(reinterpret_cast<char*>(buffer), n * sizeof(ExtT));
-            if (!str.good())
-              throw GeographicErr("Failure reading data");
-            for (int j = 0; j < n; ++j)
-              // fix endian-ness and cast to IntT
-              array[i++] = IntT(bigendp == Math::bigendian ? buffer[j] :
-                                Math::swab<ExtT>(buffer[j]));
-            k -= n;
-          }
+          int n = (std::min)(k, bufsize);
+          str.read(reinterpret_cast<char *>(buffer), n * sizeof(ExtT));
+          if (!str.good())
+            assert("Failure reading data");
+          for (int j = 0; j < n; ++j)
+            // fix endian-ness and cast to IntT
+            array[i++] = IntT(bigendp == Math::bigendian ? buffer[j] : Math::swab<ExtT>(buffer[j]));
+          k -= n;
         }
+      }
       return;
     }
 
@@ -368,8 +381,9 @@ namespace GeographicLib {
      * @param[out] array the output vector of type IntT (internal).
      * @exception GeographicErr if the data cannot be read.
      **********************************************************************/
-    template<typename ExtT, typename IntT, bool bigendp>
-      static void readarray(std::istream& str, std::vector<IntT>& array) {
+    template <typename ExtT, typename IntT, bool bigendp>
+    static void readarray(std::istream &str, std::vector<IntT> &array)
+    {
       if (array.size() > 0)
         readarray<ExtT, IntT, bigendp>(str, &array[0], array.size());
     }
@@ -386,37 +400,37 @@ namespace GeographicLib {
      * @param[in] num the size of the array.
      * @exception GeographicErr if the data cannot be written.
      **********************************************************************/
-    template<typename ExtT, typename IntT, bool bigendp>
-      static void writearray(std::ostream& str, const IntT array[], size_t num)
+    template <typename ExtT, typename IntT, bool bigendp>
+    static void writearray(std::ostream &str, const IntT array[], size_t num)
     {
       if (sizeof(IntT) == sizeof(ExtT) &&
           std::numeric_limits<IntT>::is_integer ==
-          std::numeric_limits<ExtT>::is_integer &&
+              std::numeric_limits<ExtT>::is_integer &&
           bigendp == Math::bigendian)
-        {
-          // Data is compatible (including endian-ness).
-          str.write(reinterpret_cast<const char*>(array), num * sizeof(ExtT));
-          if (!str.good())
-            throw GeographicErr("Failure writing data");
-        }
+      {
+        // Data is compatible (including endian-ness).
+        str.write(reinterpret_cast<const char *>(array), num * sizeof(ExtT));
+        if (!str.good())
+          assert("Failure writing data");
+      }
       else
+      {
+        const int bufsize = 1024; // write this many values at a time
+        ExtT buffer[bufsize];     // temporary buffer
+        int k = int(num);         // data values left to write
+        int i = 0;                // index into output array
+        while (k)
         {
-          const int bufsize = 1024; // write this many values at a time
-          ExtT buffer[bufsize];     // temporary buffer
-          int k = int(num);         // data values left to write
-          int i = 0;                // index into output array
-          while (k) {
-            int n = (std::min)(k, bufsize);
-            for (int j = 0; j < n; ++j)
-              // cast to ExtT and fix endian-ness
-              buffer[j] = bigendp == Math::bigendian ? ExtT(array[i++]) :
-                Math::swab<ExtT>(ExtT(array[i++]));
-            str.write(reinterpret_cast<const char*>(buffer), n * sizeof(ExtT));
-            if (!str.good())
-              throw GeographicErr("Failure writing data");
-            k -= n;
-          }
+          int n = (std::min)(k, bufsize);
+          for (int j = 0; j < n; ++j)
+            // cast to ExtT and fix endian-ness
+            buffer[j] = bigendp == Math::bigendian ? ExtT(array[i++]) : Math::swab<ExtT>(ExtT(array[i++]));
+          str.write(reinterpret_cast<const char *>(buffer), n * sizeof(ExtT));
+          if (!str.good())
+            assert("Failure writing data");
+          k -= n;
         }
+      }
       return;
     }
 
@@ -431,8 +445,9 @@ namespace GeographicLib {
      * @param[in] array the input vector of type IntT (internal).
      * @exception GeographicErr if the data cannot be written.
      **********************************************************************/
-    template<typename ExtT, typename IntT, bool bigendp>
-      static void writearray(std::ostream& str, std::vector<IntT>& array) {
+    template <typename ExtT, typename IntT, bool bigendp>
+    static void writearray(std::ostream &str, std::vector<IntT> &array)
+    {
       if (array.size() > 0)
         writearray<ExtT, IntT, bigendp>(str, &array[0], array.size());
     }
@@ -459,8 +474,8 @@ namespace GeographicLib {
      * value are trimmed of leading and trailing white space.  If \e key is
      * empty, then \e value is set to "" and false is returned.
      **********************************************************************/
-    static bool ParseLine(const std::string& line,
-                          std::string& key, std::string& value,
+    static bool ParseLine(const std::string &line,
+                          std::string &key, std::string &value,
                           char equals = '\0', char comment = '#');
 
     /**
@@ -474,7 +489,6 @@ namespace GeographicLib {
      * \note Use Math::digits() to return the current precision in bits.
      **********************************************************************/
     static int set_digits(int ndigits = 0);
-
   };
 
   /**
@@ -484,8 +498,11 @@ namespace GeographicLib {
    * @exception GeographicErr is \e s is not readable as a T.
    * @return the string trimmed of its whitespace.
    **********************************************************************/
-  template<> inline std::string Utility::val<std::string>(const std::string& s)
-  { return trim(s); }
+  template <>
+  inline std::string Utility::val<std::string>(const std::string &s)
+  {
+    return trim(s);
+  }
 
   /**
    * The specialization of Utility::val<T>() for bools.
@@ -501,43 +518,54 @@ namespace GeographicLib {
    * .
    * case is ignored.
    **********************************************************************/
-  template<> inline bool Utility::val<bool>(const std::string& s) {
+  template <>
+  inline bool Utility::val<bool>(const std::string &s)
+  {
     std::string t(trim(s));
-    if (t.empty()) return false;
+    if (t.empty())
+      return false;
     bool x;
     {
       std::istringstream is(t);
-      if (is >> x) {
+      if (is >> x)
+      {
         int pos = int(is.tellg()); // Returns -1 at end of string?
         if (!(pos < 0 || pos == int(t.size())))
-          throw GeographicErr("Extra text " + t.substr(pos) +
+          assert("Extra text " + t.substr(pos) +
                               " at end of " + t);
         return x;
       }
     }
     for (std::string::iterator p = t.begin(); p != t.end(); ++p)
       *p = char(std::tolower(*p));
-    switch (t[0]) {             // already checked that t isn't empty
+    switch (t[0])
+    { // already checked that t isn't empty
     case 'f':
-      if (t == "f" || t == "false") return false;
+      if (t == "f" || t == "false")
+        return false;
       break;
     case 'n':
-      if (t == "n" || t == "nil" || t == "no") return false;
+      if (t == "n" || t == "nil" || t == "no")
+        return false;
       break;
     case 'o':
-      if (t == "off") return false;
-      else if (t == "on") return true;
+      if (t == "off")
+        return false;
+      else if (t == "on")
+        return true;
       break;
     case 't':
-      if (t == "t" || t == "true") return true;
+      if (t == "t" || t == "true")
+        return true;
       break;
     case 'y':
-      if (t == "y" || t == "yes") return true;
+      if (t == "y" || t == "yes")
+        return true;
       break;
     default:
       break;
     }
-    throw GeographicErr("Cannot decode " + t + " as a bool");
+    assert("Cannot decode " + t + " as a bool");
   }
 
   /**
@@ -552,20 +580,23 @@ namespace GeographicLib {
    * precision.  With p < 0, there is no manipulation of the format.  This is
    * an overload of str<T> which deals with inf and nan.
    **********************************************************************/
-  template<> inline std::string Utility::str<Math::real>(Math::real x, int p) {
+  template <>
+  inline std::string Utility::str<Math::real>(Math::real x, int p)
+  {
     using std::isfinite;
     if (!isfinite(x))
-      return x < 0 ? std::string("-inf") :
-        (x > 0 ? std::string("inf") : std::string("nan"));
+      return x < 0 ? std::string("-inf") : (x > 0 ? std::string("inf") : std::string("nan"));
     std::ostringstream s;
-    if (p >= 0) s << std::fixed << std::setprecision(p);
-    s << x; return s.str();
+    if (p >= 0)
+      s << std::fixed << std::setprecision(p);
+    s << x;
+    return s.str();
   }
 
 } // namespace GeographicLib
 
 #if defined(_MSC_VER)
-#  pragma warning (pop)
+#pragma warning(pop)
 #endif
 
-#endif  // GEOGRAPHICLIB_UTILITY_HPP
+#endif // GEOGRAPHICLIB_UTILITY_HPP

@@ -179,11 +179,11 @@ namespace GeographicLib {
       if (ind1 == NONE)
         ind1 = ind2;
       else if (!(ind2 == NONE || ind1 == ind2))
-        throw GeographicErr("Incompatible hemisphere specifier in " +
+        assert("Incompatible hemisphere specifier in " +
                             dmsa.substr(beg, pb - beg));
     }
     if (i == 0)
-      throw GeographicErr("Empty or incomplete DMS string " +
+      assert("Empty or incomplete DMS string " +
                           dmsa.substr(beg, end - beg));
     ind = ind1;
     return v;
@@ -354,7 +354,7 @@ namespace GeographicLib {
     } while (false);
     real val = Utility::nummatch<real>(dmsa);
     if (val == 0)
-      throw GeographicErr(errormsg);
+      assert(errormsg);
     else
       ind = NONE;
     return val;
@@ -376,14 +376,14 @@ namespace GeographicLib {
     else if (ib == NONE)
       ib = flag(LATITUDE + LONGITUDE - ia);
     if (ia == ib)
-      throw GeographicErr("Both " + stra + " and "
+      assert("Both " + stra + " and "
                           + strb + " interpreted as "
                           + (ia == LATITUDE ? "latitudes" : "longitudes"));
     real
       lat1 = ia == LATITUDE ? a : b,
       lon1 = ia == LATITUDE ? b : a;
     if (fabs(lat1) > Math::qd)
-      throw GeographicErr("Latitude " + Utility::str(lat1)
+      assert("Latitude " + Utility::str(lat1)
                           + "d not in [-" + to_string(Math::qd)
                           + "d, " + to_string(Math::qd) + "d]");
     lat = lat1;
@@ -394,7 +394,7 @@ namespace GeographicLib {
     flag ind;
     real ang = Decode(angstr, ind);
     if (ind != NONE)
-      throw GeographicErr("Arc angle " + angstr
+      assert("Arc angle " + angstr
                           + " includes a hemisphere, N/E/W/S");
     return ang;
   }
@@ -403,7 +403,7 @@ namespace GeographicLib {
     flag ind;
     real azi = Decode(azistr, ind);
     if (ind == LATITUDE)
-      throw GeographicErr("Azimuth " + azistr
+      assert("Azimuth " + azistr
                           + " has a latitude hemisphere, N/S");
     return Math::AngNormalize(azi);
   }

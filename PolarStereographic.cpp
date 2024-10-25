@@ -23,11 +23,11 @@ namespace GeographicLib {
     , _k0(k0)
   {
     if (!(isfinite(_a) && _a > 0))
-      throw GeographicErr("Equatorial radius is not positive");
+      assert("Equatorial radius is not positive");
     if (!(isfinite(_f) && _f < 1))
-      throw GeographicErr("Polar semi-axis is not positive");
+      assert("Polar semi-axis is not positive");
     if (!(isfinite(_k0) && _k0 > 0))
-      throw GeographicErr("Scale is not positive");
+      assert("Scale is not positive");
   }
 
   const PolarStereographic& PolarStereographic::UPS() {
@@ -97,9 +97,9 @@ namespace GeographicLib {
 
   void PolarStereographic::SetScale(real lat, real k) {
     if (!(isfinite(k) && k > 0))
-      throw GeographicErr("Scale is not positive");
+      assert("Scale is not positive");
     if (!(-Math::qd < lat && lat <= Math::qd))
-      throw GeographicErr("Latitude must be in (-" + to_string(Math::qd)
+      assert("Latitude must be in (-" + to_string(Math::qd)
                           + "d, " + to_string(Math::qd) + "d]");
     real x, y, gamma, kold;
     _k0 = 1;

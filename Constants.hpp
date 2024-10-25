@@ -47,6 +47,7 @@
 #include <stdexcept>
 #include <string>
 #include <Math.hpp>
+#include <cassert>
 
 /**
  * \brief Namespace for %GeographicLib

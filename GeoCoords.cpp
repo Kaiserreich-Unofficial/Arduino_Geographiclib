@@ -44,7 +44,7 @@ namespace GeographicLib {
         zoneind = 2;
         coordind = 0;
       } else
-        throw GeographicErr("Neither " + sa[0] + " nor " + sa[2]
+        assert("Neither " + sa[0] + " nor " + sa[2]
                             + " of the form UTM/UPS Zone + Hemisphere"
                             + " (ex: 38n, 09s, n)");
       UTMUPS::DecodeZone(sa[zoneind], _zone, _northp);
@@ -54,7 +54,7 @@ namespace GeographicLib {
                       _lat, _long, _gamma, _k);
       FixHemisphere();
     } else
-      throw GeographicErr("Coordinate requires 1, 2, or 3 elements");
+      assert("Coordinate requires 1, 2, or 3 elements");
     CopyToAlt();
   }
 
@@ -159,7 +159,7 @@ namespace GeographicLib {
       _northing += (_northp ? 1 : -1) * UTMUPS::UTMShift();
       _northp = !_northp;
     } else
-      throw GeographicErr("Hemisphere mixup");
+      assert("Hemisphere mixup");
   }
 
 } // namespace GeographicLib

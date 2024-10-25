@@ -62,21 +62,21 @@ namespace GeographicLib {
       string coeff = _filename + ".cof";
       ifstream coeffstr(coeff.c_str(), ios::binary);
       if (!coeffstr.good())
-        throw GeographicErr("Error opening " + coeff);
+        assert("Error opening " + coeff);
       char id[idlength_ + 1];
       coeffstr.read(id, idlength_);
       if (!coeffstr.good())
-        throw GeographicErr("No header in " + coeff);
+        assert("No header in " + coeff);
       id[idlength_] = '\0';
       if (_id != string(id))
-        throw GeographicErr("ID mismatch: " + _id + " vs " + id);
+        assert("ID mismatch: " + _id + " vs " + id);
       int N, M;
       if (truncate) { N = Nmax; M = Mmax; }
       SphericalEngine::coeff::readcoeffs(coeffstr, N, M, _cCx, _sSx, truncate);
       if (!(N >= 0 && M >= 0))
-        throw GeographicErr("Degree and order must be at least 0");
+        assert("Degree and order must be at least 0");
       if (_cCx[0] != 0)
-        throw GeographicErr("The degree 0 term should be zero");
+        assert("The degree 0 term should be zero");
       _cCx[0] = 1;              // Include the 1/r term in the sum
       _gravitational = SphericalHarmonic(_cCx, _sSx, N, N, M, _amodel, _norm);
       if (truncate) { N = Nmax; M = Mmax; }
@@ -90,7 +90,7 @@ namespace GeographicLib {
       int pos = int(coeffstr.tellg());
       coeffstr.seekg(0, ios::end);
       if (pos != coeffstr.tellg())
-        throw GeographicErr("Extra data in " + coeff);
+        assert("Extra data in " + coeff);
     }
     int nmx = _gravitational.Coefficients().nmx();
     _nmx = max(nmx, _correction.Coefficients().nmx());
@@ -136,17 +136,17 @@ namespace GeographicLib {
     _filename = _dir + "/" + name + ".egm";
     ifstream metastr(_filename.c_str());
     if (!metastr.good())
-      throw GeographicErr("Cannot open " + _filename);
+      assert("Cannot open " + _filename);
     string line;
     getline(metastr, line);
     if (!(line.size() >= 6 && line.substr(0,5) == "EGMF-"))
-      throw GeographicErr(_filename + " does not contain EGMF-n signature");
+      assert(_filename + " does not contain EGMF-n signature");
     string::size_type n = line.find_first_of(spaces, 5);
     if (n != string::npos)
       n -= 5;
     string version(line, 5, n);
     if (version != "1")
-      throw GeographicErr("Unknown version in " + _filename + ": " + version);
+      assert("Unknown version in " + _filename + ": " + version);
     string key, val;
     real a = Math::NaN(), GM = a, omega = a, f = a, J2 = a;
     while (getline(metastr, line)) {
@@ -183,29 +183,29 @@ namespace GeographicLib {
         else if (val == "SCHMIDT" || val == "Schmidt" || val == "schmidt")
           _norm = SphericalHarmonic::SCHMIDT;
         else
-          throw GeographicErr("Unknown normalization " + val);
+          assert("Unknown normalization " + val);
       } else if (key == "ByteOrder") {
         if (val == "Big" || val == "big")
-          throw GeographicErr("Only little-endian ordering is supported");
+          assert("Only little-endian ordering is supported");
         else if (!(val == "Little" || val == "little"))
-          throw GeographicErr("Unknown byte ordering " + val);
+          assert("Unknown byte ordering " + val);
       } else if (key == "ID")
         _id = val;
       // else unrecognized keywords are skipped
     }
     // Check values
     if (!(isfinite(_amodel) && _amodel > 0))
-      throw GeographicErr("Model radius must be positive");
+      assert("Model radius must be positive");
     if (!(isfinite(_gGMmodel) && _gGMmodel > 0))
-      throw GeographicErr("Model mass constant must be positive");
+      assert("Model mass constant must be positive");
     if (!(isfinite(_corrmult) && _corrmult > 0))
-      throw GeographicErr("Correction multiplier must be positive");
+      assert("Correction multiplier must be positive");
     if (!(isfinite(_zeta0)))
-      throw GeographicErr("Height offset must be finite");
+      assert("Height offset must be finite");
     if (int(_id.size()) != idlength_)
-      throw GeographicErr("Invalid ID");
+      assert("Invalid ID");
     if (isfinite(f) && isfinite(J2))
-      throw GeographicErr("Cannot specify both f and J2");
+      assert("Cannot specify both f and J2");
     _earth = NormalGravity(a, GM, omega,
                            isfinite(f) ? f : J2, isfinite(f));
   }

@@ -78,7 +78,7 @@ namespace GeographicLib {
     int y1, m1, d1;
     date(s, y1, m1, d1);
     if (!(s > 0 && y == y1 && m == m1 && d == d1))
-      throw GeographicErr("Invalid date " +
+      assert("Invalid date " +
                           str(y) + "-" + str(m) + "-" + str(d)
                           + (s > 0 ? "; use " +
                              str(y1) + "-" + str(m1) + "-" + str(d1) :
@@ -122,24 +122,24 @@ namespace GeographicLib {
     if (p1 == string::npos)
       y1 = val<int>(s);
     else if (s[p1] != '-')
-      throw GeographicErr("Delimiter not hyphen in date " + s);
+      assert("Delimiter not hyphen in date " + s);
     else if (p1 == 0)
-      throw GeographicErr("Empty year field in date " + s);
+      assert("Empty year field in date " + s);
     else {
       y1 = val<int>(s.substr(0, p1));
       if (++p1 == s.size())
-        throw GeographicErr("Empty month field in date " + s);
+        assert("Empty month field in date " + s);
       string::size_type p2 = s.find_first_not_of(digits, p1);
       if (p2 == string::npos)
         m1 = val<int>(s.substr(p1));
       else if (s[p2] != '-')
-        throw GeographicErr("Delimiter not hyphen in date " + s);
+        assert("Delimiter not hyphen in date " + s);
       else if (p2 == p1)
-        throw GeographicErr("Empty month field in date " + s);
+        assert("Empty month field in date " + s);
       else {
         m1 = val<int>(s.substr(p1, p2 - p1));
         if (++p2 == s.size())
-          throw GeographicErr("Empty day field in date " + s);
+          assert("Empty day field in date " + s);
         d1 = val<int>(s.substr(p2));
       }
     }

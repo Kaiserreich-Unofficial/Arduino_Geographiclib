@@ -20,7 +20,7 @@ namespace GeographicLib {
   void GARS::Forward(real lat, real lon, int prec, string& gars) {
     using std::isnan;           // Needed for Centos 7, ubuntu 14
     if (fabs(lat) > Math::qd)
-      throw GeographicErr("Latitude " + Utility::str(lat)
+      assert("Latitude " + Utility::str(lat)
                           + "d not in [-" + to_string(Math::qd)
                           + "d, " + to_string(Math::qd) + "d]");
     if (isnan(lat) || isnan(lon)) {
@@ -68,30 +68,30 @@ namespace GeographicLib {
       return;
     }
     if (len < baselen_)
-      throw GeographicErr("GARS must have at least 5 characters " + gars);
+      assert("GARS must have at least 5 characters " + gars);
     if (len > maxlen_)
-      throw GeographicErr("GARS can have at most 7 characters " + gars);
+      assert("GARS can have at most 7 characters " + gars);
     int prec1 = len - baselen_;
     int ilon = 0;
     for (int c = 0; c < lonlen_; ++c) {
       int k = Utility::lookup(digits_, gars[c]);
       if (k < 0)
-        throw GeographicErr("GARS must start with 3 digits " + gars);
+        assert("GARS must start with 3 digits " + gars);
       ilon = ilon * baselon_ + k;
     }
     if (!(ilon >= 1 && ilon <= 2 * Math::td))
-        throw GeographicErr("Initial digits in GARS must lie in [1, 720] " +
+        assert("Initial digits in GARS must lie in [1, 720] " +
                             gars);
     --ilon;
     int ilat = 0;
     for (int c = 0; c < latlen_; ++c) {
       int k = Utility::lookup(letters_, gars[lonlen_ + c]);
       if (k < 0)
-        throw GeographicErr("Illegal letters in GARS " + gars.substr(3,2));
+        assert("Illegal letters in GARS " + gars.substr(3,2));
       ilat = ilat * baselat_ + k;
     }
     if (!(ilat < Math::td))
-      throw  GeographicErr("GARS letters must lie in [AA, QZ] " + gars);
+      assert("GARS letters must lie in [AA, QZ] " + gars);
     real
       unit = mult1_,
       lat1 = ilat + latorig_ * unit,
@@ -99,7 +99,7 @@ namespace GeographicLib {
     if (prec1 > 0) {
       int k = Utility::lookup(digits_, gars[baselen_]);
       if (!(k >= 1 && k <= mult2_ * mult2_))
-        throw GeographicErr("6th character in GARS must [1, 4] " + gars);
+        assert("6th character in GARS must [1, 4] " + gars);
       --k;
       unit *= mult2_;
       lat1 = mult2_ * lat1 + (mult2_ - 1 - k / mult2_);
@@ -107,7 +107,7 @@ namespace GeographicLib {
       if (prec1 > 1) {
         k = Utility::lookup(digits_, gars[baselen_ + 1]);
         if (!(k >= 1 /* && k <= mult3_ * mult3_ */))
-          throw GeographicErr("7th character in GARS must [1, 9] " + gars);
+          assert("7th character in GARS must [1, 9] " + gars);
         --k;
         unit *= mult3_;
         lat1 = mult3_ * lat1 + (mult3_ - 1 - k / mult3_);

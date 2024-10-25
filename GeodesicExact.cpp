@@ -78,9 +78,9 @@ namespace GeographicLib
                sqrt(fmax(real(0.001), fabs(_f)) * fmin(real(1), 1 - _f / 2) / 2))
   {
     if (!(isfinite(_a) && _a > 0))
-      throw GeographicErr("Equatorial radius is not positive");
+      assert("Equatorial radius is not positive");
     if (!(isfinite(_b) && _b > 0))
-      throw GeographicErr("Polar semi-axis is not positive");
+      assert("Polar semi-axis is not positive");
 
     // Required number of terms in DST for full accuracy for all precisions as
     // a function of n in [-0.99, 0.99]. For precision 4 and 5, GEOGRAPHICLIB_DIGITS was set to, resp., 384 and 768.

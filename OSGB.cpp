@@ -35,7 +35,7 @@ namespace GeographicLib {
     using std::isnan;           // Needed for Centos 7, ubuntu 14
     CheckCoords(x, y);
     if (!(prec >= 0 && prec <= maxprec_))
-      throw GeographicErr("OSGB precision " + Utility::str(prec)
+      assert("OSGB precision " + Utility::str(prec)
                           + " not in [0, "
                           + Utility::str(int(maxprec_)) + "]");
     if (isnan(x) || isnan(y)) {
@@ -102,16 +102,16 @@ namespace GeographicLib {
     for (int i = 0; i < len; ++i) {
       if (!isspace(gridref[i])) {
         if (p >= 2 + 2 * maxprec_)
-          throw GeographicErr("OSGB string " + gridref + " too long");
+          assert("OSGB string " + gridref + " too long");
         grid[p++] = gridref[i];
       }
     }
     len = p;
     p = 0;
     if (len < 2)
-      throw GeographicErr("OSGB string " + gridref + " too short");
+      assert("OSGB string " + gridref + " too short");
     if (len % 2)
-      throw GeographicErr("OSGB string " + gridref +
+      assert("OSGB string " + gridref +
                           " has odd number of characters");
     int
       xh = 0,
@@ -119,7 +119,7 @@ namespace GeographicLib {
     while (p < 2) {
       int i = Utility::lookup(letters_, grid[p++]);
       if (i < 0)
-        throw GeographicErr("Illegal prefix character " + gridref);
+        assert("Illegal prefix character " + gridref);
       yh = yh * tilegrid_ + tilegrid_ - (i / tilegrid_) - 1;
       xh = xh * tilegrid_ + (i % tilegrid_);
     }
@@ -137,7 +137,7 @@ namespace GeographicLib {
         ix = Utility::lookup(digits_, grid[p + i]),
         iy = Utility::lookup(digits_, grid[p + i + prec1]);
       if (ix < 0 || iy < 0)
-        throw GeographicErr("Encountered a non-digit in " + gridref);
+        assert("Encountered a non-digit in " + gridref);
       x1 += unit * ix;
       y1 += unit * iy;
     }
@@ -155,12 +155,12 @@ namespace GeographicLib {
     // and open on the upper end -- and this is reflected in the error
     // messages.  NaNs are let through.
     if (x < minx_ || x >= maxx_)
-      throw GeographicErr("Easting " + Utility::str(int(floor(x/1000)))
+      assert("Easting " + Utility::str(int(floor(x/1000)))
                           + "km not in OSGB range ["
                           + Utility::str(minx_/1000) + "km, "
                           + Utility::str(maxx_/1000) + "km)");
     if (y < miny_ || y >= maxy_)
-      throw GeographicErr("Northing " + Utility::str(int(floor(y/1000)))
+      assert("Northing " + Utility::str(int(floor(y/1000)))
                           + "km not in OSGB range ["
                           + Utility::str(miny_/1000) + "km, "
                           + Utility::str(maxy_/1000) + "km)");

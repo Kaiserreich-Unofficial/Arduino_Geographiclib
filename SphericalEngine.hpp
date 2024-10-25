@@ -133,10 +133,10 @@ namespace GeographicLib {
         if (!((_nNx >= _nmx && _nmx >= _mmx && _mmx >= 0) ||
               // If mmx = -1 then the sums are empty so require nmx = -1 also.
               (_nmx == -1 && _mmx == -1)))
-          throw GeographicErr("Bad indices for coeff");
+          assert("Bad indices for coeff");
         if (!(index(_nmx, _mmx) < int(C.size()) &&
               index(_nmx, _mmx) < int(S.size()) + (_nNx + 1)))
-          throw GeographicErr("Arrays too small in coeff");
+          assert("Arrays too small in coeff");
         SphericalEngine::RootTable(_nmx);
       }
       /**
@@ -161,10 +161,10 @@ namespace GeographicLib {
         , _sSnm(S.begin())
       {
         if (!(_nNx >= -1))
-          throw GeographicErr("Bad indices for coeff");
+          assert("Bad indices for coeff");
         if (!(index(_nmx, _mmx) < int(C.size()) &&
               index(_nmx, _mmx) < int(S.size()) + (_nNx + 1)))
-          throw GeographicErr("Arrays too small in coeff");
+          assert("Arrays too small in coeff");
         SphericalEngine::RootTable(_nmx);
       }
       /**

@@ -388,7 +388,7 @@ namespace GeographicLib {
     if (truncate) {
       if (!((N >= M && M >= 0) || (N == -1 && M == -1)))
         // The last condition is that M = -1 implies N = -1.
-        throw GeographicErr("Bad requested degree and order " +
+        assert("Bad requested degree and order " +
                             Utility::str(N) + " " + Utility::str(M));
     }
     int nm[2];
@@ -396,7 +396,7 @@ namespace GeographicLib {
     int N0 = nm[0], M0 = nm[1];
     if (!((N0 >= M0 && M0 >= 0) || (N0 == -1 && M0 == -1)))
       // The last condition is that M0 = -1 implies N0 = -1.
-      throw GeographicErr("Bad degree and order " +
+      assert("Bad degree and order " +
                           Utility::str(N0) + " " + Utility::str(M0));
     N = truncate ? min(N, N0) : N0;
     M = truncate ? min(M, M0) : M0;

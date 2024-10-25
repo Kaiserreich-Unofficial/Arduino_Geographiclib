@@ -22,7 +22,7 @@ namespace GeographicLib {
   void Georef::Forward(real lat, real lon, int prec, string& georef) {
     using std::isnan;           // Needed for Centos 7, ubuntu 14
     if (fabs(lat) > Math::qd)
-      throw GeographicErr("Latitude " + Utility::str(lat)
+      assert("Latitude " + Utility::str(lat)
                           + "d not in [-" + to_string(Math::qd)
                           + "d, " + to_string(Math::qd) + "d]");
     if (isnan(lat) || isnan(lon)) {
@@ -73,44 +73,44 @@ namespace GeographicLib {
       return;
     }
     if (len < baselen_ - 2)
-      throw GeographicErr("Georef must start with at least 2 letters "
+      assert("Georef must start with at least 2 letters "
                           + georef);
     int prec1 = (2 + len - baselen_) / 2 - 1;
     int k;
     k = Utility::lookup(lontile_, georef[0]);
     if (k < 0)
-      throw GeographicErr("Bad longitude tile letter in georef " + georef);
+      assert("Bad longitude tile letter in georef " + georef);
     real lon1 = k + lonorig_ / tile_;
     k = Utility::lookup(lattile_, georef[1]);
     if (k < 0)
-      throw GeographicErr("Bad latitude tile letter in georef " + georef);
+      assert("Bad latitude tile letter in georef " + georef);
     real lat1 = k + latorig_ / tile_;
     real unit = 1;
     if (len > 2) {
       unit *= tile_;
       k = Utility::lookup(degrees_, georef[2]);
       if (k < 0)
-        throw GeographicErr("Bad longitude degree letter in georef " + georef);
+        assert("Bad longitude degree letter in georef " + georef);
       lon1 = lon1 * tile_ + k;
       if (len < 4)
-        throw GeographicErr("Missing latitude degree letter in georef "
+        assert("Missing latitude degree letter in georef "
                             + georef);
       k = Utility::lookup(degrees_, georef[3]);
       if (k < 0)
-        throw GeographicErr("Bad latitude degree letter in georef " + georef);
+        assert("Bad latitude degree letter in georef " + georef);
       lat1 = lat1 * tile_ + k;
       if (prec1 > 0) {
         if (georef.find_first_not_of(digits_, baselen_) != string::npos)
-          throw GeographicErr("Non digits in trailing portion of georef "
+          assert("Non digits in trailing portion of georef "
                               + georef.substr(baselen_));
         if (len % 2)
-          throw GeographicErr("Georef must end with an even number of digits "
+          assert("Georef must end with an even number of digits "
                               + georef.substr(baselen_));
         if (prec1 == 1)
-          throw GeographicErr("Georef needs at least 4 digits for minutes "
+          assert("Georef needs at least 4 digits for minutes "
                               + georef.substr(baselen_));
         if (prec1 > maxprec_)
-          throw GeographicErr("More than " + Utility::str(2*maxprec_)
+          assert("More than " + Utility::str(2*maxprec_)
                               + " digits in georef "
                               + georef.substr(baselen_));
         for (int i = 0; i < prec1; ++i) {
@@ -120,7 +120,7 @@ namespace GeographicLib {
             x = Utility::lookup(digits_, georef[baselen_ + i]),
             y = Utility::lookup(digits_, georef[baselen_ + i + prec1]);
           if (!(i || (x < m && y < m)))
-            throw GeographicErr("Minutes terms in georef must be less than 60 "
+            assert("Minutes terms in georef must be less than 60 "
                                 + georef.substr(baselen_));
           lon1 = m * lon1 + x;
           lat1 = m * lat1 + y;

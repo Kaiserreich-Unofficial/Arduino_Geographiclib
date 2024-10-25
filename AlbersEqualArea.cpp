@@ -29,13 +29,13 @@ namespace GeographicLib {
     , _qx(_qZ / ( 2 * _e2m ))
   {
     if (!(isfinite(_a) && _a > 0))
-      throw GeographicErr("Equatorial radius is not positive");
+      assert("Equatorial radius is not positive");
     if (!(isfinite(_f) && _f < 1))
-      throw GeographicErr("Polar semi-axis is not positive");
+      assert("Polar semi-axis is not positive");
     if (!(isfinite(k0) && k0 > 0))
-      throw GeographicErr("Scale is not positive");
+      assert("Scale is not positive");
     if (!(fabs(stdlat) <= Math::qd))
-      throw GeographicErr("Standard latitude not in [-" + to_string(Math::qd)
+      assert("Standard latitude not in [-" + to_string(Math::qd)
                           + "d, " + to_string(Math::qd) + "d]");
     real sphi, cphi;
     Math::sincosd(stdlat, sphi, cphi);
@@ -59,17 +59,17 @@ namespace GeographicLib {
     , _qx(_qZ / ( 2 * _e2m ))
   {
     if (!(isfinite(_a) && _a > 0))
-      throw GeographicErr("Equatorial radius is not positive");
+      assert("Equatorial radius is not positive");
     if (!(isfinite(_f) && _f < 1))
-      throw GeographicErr("Polar semi-axis is not positive");
+      assert("Polar semi-axis is not positive");
     if (!(isfinite(k1) && k1 > 0))
-      throw GeographicErr("Scale is not positive");
+      assert("Scale is not positive");
     if (!(fabs(stdlat1) <= Math::qd))
-      throw GeographicErr("Standard latitude 1 not in [-"
+      assert("Standard latitude 1 not in [-"
                           + to_string(Math::qd) + "d, "
                           + to_string(Math::qd) + "d]");
     if (!(fabs(stdlat2) <= Math::qd))
-      throw GeographicErr("Standard latitude 2 not in [-"
+      assert("Standard latitude 2 not in [-"
                           + to_string(Math::qd) + "d, "
                           + to_string(Math::qd) + "d]");
     real sphi1, cphi1, sphi2, cphi2;
@@ -97,25 +97,25 @@ namespace GeographicLib {
     , _qx(_qZ / ( 2 * _e2m ))
   {
     if (!(isfinite(_a) && _a > 0))
-      throw GeographicErr("Equatorial radius is not positive");
+      assert("Equatorial radius is not positive");
     if (!(isfinite(_f) && _f < 1))
-      throw GeographicErr("Polar semi-axis is not positive");
+      assert("Polar semi-axis is not positive");
     if (!(isfinite(k1) && k1 > 0))
-      throw GeographicErr("Scale is not positive");
+      assert("Scale is not positive");
     if (signbit(coslat1))
-      throw GeographicErr("Standard latitude 1 not in [-"
+      assert("Standard latitude 1 not in [-"
                           + to_string(Math::qd) + "d, "
                           + to_string(Math::qd) + "d]");
     if (signbit(coslat2))
-      throw GeographicErr("Standard latitude 2 not in [-"
+      assert("Standard latitude 2 not in [-"
                           + to_string(Math::qd) + "d, "
                           + to_string(Math::qd) + "d]");
     if (!(fabs(sinlat1) <= 1 && coslat1 <= 1) || (coslat1 == 0 && sinlat1 == 0))
-      throw GeographicErr("Bad sine/cosine of standard latitude 1");
+      assert("Bad sine/cosine of standard latitude 1");
     if (!(fabs(sinlat2) <= 1 && coslat2 <= 1) || (coslat2 == 0 && sinlat2 == 0))
-      throw GeographicErr("Bad sine/cosine of standard latitude 2");
+      assert("Bad sine/cosine of standard latitude 2");
     if (coslat1 == 0 && coslat2 == 0 && sinlat1 * sinlat2 <= 0)
-      throw GeographicErr
+      assert
         ("Standard latitudes cannot be opposite poles");
     Init(sinlat1, coslat1, sinlat2, coslat2, k1);
   }
@@ -542,9 +542,9 @@ namespace GeographicLib {
 
   void AlbersEqualArea::SetScale(real lat, real k) {
     if (!(isfinite(k) && k > 0))
-      throw GeographicErr("Scale is not positive");
+      assert("Scale is not positive");
     if (!(fabs(lat) < Math::qd))
-      throw GeographicErr("Latitude for SetScale not in (-"
+      assert("Latitude for SetScale not in (-"
                           + to_string(Math::qd) + "d, "
                           + to_string(Math::qd) + "d)");
     real x, y, gamma, kold;

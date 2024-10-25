@@ -222,13 +222,13 @@ namespace GeographicLib {
                                real kp2, real alphap2) {
     // Accept nans here (needed for GeodesicExact)
     if (k2 > 1)
-      throw GeographicErr("Parameter k2 is not in (-inf, 1]");
+      assert("Parameter k2 is not in (-inf, 1]");
     if (alpha2 > 1)
-      throw GeographicErr("Parameter alpha2 is not in (-inf, 1]");
+      assert("Parameter alpha2 is not in (-inf, 1]");
     if (kp2 < 0)
-      throw GeographicErr("Parameter kp2 is not in [0, inf)");
+      assert("Parameter kp2 is not in [0, inf)");
     if (alphap2 < 0)
-      throw GeographicErr("Parameter alphap2 is not in [0, inf)");
+      assert("Parameter alphap2 is not in [0, inf)");
     _k2 = k2;
     _kp2 = kp2;
     _alpha2 = alpha2;

@@ -82,9 +82,9 @@ namespace GeographicLib {
       _c2 = _geodexact._c2;
     else {
       if (!(isfinite(_a) && _a > 0))
-        throw GeographicErr("Equatorial radius is not positive");
+        assert("Equatorial radius is not positive");
       if (!(isfinite(_b) && _b > 0))
-        throw GeographicErr("Polar semi-axis is not positive");
+        assert("Polar semi-axis is not positive");
       A3coeff();
       C3coeff();
       C4coeff();

@@ -107,7 +107,7 @@ namespace GeographicLib {
       : _a(a)
       , _norm(norm) {
       if (!(N1 <= N && N2 <= N))
-        throw GeographicErr("N1 and N2 cannot be larger that N");
+        assert("N1 and N2 cannot be larger that N");
       _c[0] = SphericalEngine::coeff(C, S, N);
       _c[1] = SphericalEngine::coeff(C1, S1, N1);
       _c[2] = SphericalEngine::coeff(C2, S2, N2);
@@ -164,9 +164,9 @@ namespace GeographicLib {
       : _a(a)
       , _norm(norm) {
       if (!(nmx1 <= nmx && nmx2 <= nmx))
-        throw GeographicErr("nmx1 and nmx2 cannot be larger that nmx");
+        assert("nmx1 and nmx2 cannot be larger that nmx");
       if (!(mmx1 <= mmx && mmx2 <= mmx))
-        throw GeographicErr("mmx1 and mmx2 cannot be larger that mmx");
+        assert("mmx1 and mmx2 cannot be larger that mmx");
       _c[0] = SphericalEngine::coeff(C, S, N, nmx, mmx);
       _c[1] = SphericalEngine::coeff(C1, S1, N1, nmx1, mmx1);
       _c[2] = SphericalEngine::coeff(C2, S2, N2, nmx2, mmx2);

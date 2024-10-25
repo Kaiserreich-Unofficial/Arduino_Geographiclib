@@ -23,7 +23,7 @@ namespace GeographicLib {
     static const real loneps = Math::hd / shift;
     static const real lateps = Math::qd / shift;
     if (fabs(lat) > Math::qd)
-      throw GeographicErr("Latitude " + Utility::str(lat)
+      assert("Latitude " + Utility::str(lat)
                           + "d not in [-" + to_string(Math::qd)
                           + "d, " + to_string(Math::qd) + "d]");
     if (isnan(lat) || isnan(lon)) {
@@ -80,7 +80,7 @@ namespace GeographicLib {
     for (unsigned k = 0, j = 0; k < unsigned(len1); ++k) {
       int byte = Utility::lookup(ucdigits_, geohash[k]);
       if (byte < 0)
-        throw GeographicErr("Illegal character in geohash " + geohash);
+        assert("Illegal character in geohash " + geohash);
       for (unsigned m = 16; m; m >>= 1) {
         if (j == 0)
           ulon = (ulon << 1) + unsigned((byte & m) != 0);
